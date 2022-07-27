@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./images/Group 112.svg" type="image/svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/main.css">
+  <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+  <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+  <script defer src="./script/script.js"></script>
+  <title>CRM</title>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <img class="header__logo" src="./images/Group 112.svg">
+      <input type="text" class="header__search" placeholder="Введите запрос">
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <section class="calalog">
+        <h2 class="catalog__header">
+          Клиенты
+        </h2>
+        <div class="catalog__main-content">
+          <table class="catalog__main-table">
+            <tr class="catalog__filters row">
+              <td class="catalog__filter-id filter"><p>ID</p></td>
+              <td class="catalog__filter-name filter"><p>Фамилия Имя Отчество</p></td>
+              <td class="catalog__filter-date filter"><p>Дата и время создания</p></td>
+              <td class="catalog__filter-last-change filter"><p>Последние изменения</p></td>
+              <td class="catalog__filter-contacts filter"><p>Контакты</p></td>
+              <td class="catalog__filter-changes filter"><p>Действия</p></td>
+            </tr>
+          </table>
+        </div>
+        <button class="catalog__btn-create-client">
+          <svg width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.5 8C16.71 8 18.5 6.21 18.5 4C18.5 1.79 16.71 0 14.5 0C12.29 0 10.5 1.79 10.5 4C10.5 6.21 12.29 8 14.5 8ZM5.5 6V3H3.5V6H0.5V8H3.5V11H5.5V8H8.5V6H5.5ZM14.5 10C11.83 10 6.5 11.34 6.5 14V16H22.5V14C22.5 11.34 17.17 10 14.5 10Z" fill="#9873FF"/>
+          </svg>
+          Добавить клиента
+        </button>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>
