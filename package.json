@@ -4,5 +4,9 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "custom-select": "^1.1.15",
+    "sorting-algorithms": "^1.1.0"
   }
 }

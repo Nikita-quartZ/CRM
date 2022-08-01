@@ -13,6 +13,10 @@ body {
   background: $grey;
 }
 
+select {
+  outline: none;
+}
+
 .container {
   width: 100%;
   max-width: 1366px;
@@ -41,8 +45,19 @@ body {
   height: 44px;
   max-width: 581px;
   width: 100%;
+  outline: none;
+  transition: border .15s linear;
+  color: $textGrey;
   &::placeholder {
     color: $textGrey;
+    transition: color .15s linear;
+  }
+  &:hover::placeholder {
+    color: $firm;
+  }
+  &:focus {
+    border: 1px solid $firm;
+    color: $firm;
   }
 }
 
@@ -73,6 +88,23 @@ body {
   margin-bottom: 100px;
   & svg {
     margin-right: 5px;
+  }
+  transition: background .15s linear, opacity .15s linear;
+  &:hover {
+    opacity: 0.7;
+    background: $firm;
+    color: $white;
+    & svg path{
+      fill: $white;
+    }
+  }
+  &:active {
+    opacity: 1;
+    background: $firm;
+    color: $white;
+    & svg path{
+      fill: $white;
+    }
   }
 }
 
@@ -109,12 +141,19 @@ body {
 }
 
 .filter {
-  color: $textGrey;
-  & p {
+  & button {
+    cursor: pointer;
     font-size: 12px;
     margin-bottom: 7px;
+    border: none;
+    background: none;
+    color: $textGrey;
   }
-
+  & p {
+    font-size: 12px;
+    color: $textGrey;
+    margin-bottom: 7px;
+  }
 }
 
 .catalog__time {
@@ -132,6 +171,15 @@ body {
   border: none;
   background: none;
   margin-right: 7px;
+  & svg g, & svg path {
+    transition: opacity .15s linear;
+  }
+  &:hover svg g {
+    opacity: 1;
+  }
+  &:hover svg path {
+    opacity: 1;
+  }
 }
 
 .change-btn, .delete-btn {
@@ -140,12 +188,22 @@ body {
   background: none;
   display: flex;
   align-items: center;
+  transition: color .15s linear;
+}
+
+.delete-btn {
+  &:hover {
+    color: $red;
+  }
 }
 
 .change-btn {
   position: relative;
   right: 1px;
   margin-right: 30px;
+  &:hover {
+    color: $firm;
+  }
 }
 
 .calalog {
@@ -159,6 +217,7 @@ body {
 }
 
 .btn-all-contact {
+  cursor: pointer;
   border: 1px solid $firm;
   border-radius: 50%;
   width: 16px;
@@ -166,4 +225,289 @@ body {
   font-size: 8px;
   line-height: 11px;
   text-align: center;
+}
+
+.new-client_contact-block {
+  width: 100%;
+  background: $grey;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.contact-block-active {
+  padding: 25px 0;
+}
+
+.new-client__new-contacts-block {
+  display: flex;
+  margin: 0 30px;
+  margin-bottom: 25px;
+}
+
+.choices {
+  min-width: 123px;
+  height: 37px;
+  background: #E7E5EB;
+  &::after {
+    border: none !important;
+  }
+  margin-bottom: 0;
+}
+
+
+.is-open .choices__inner::after {
+  transform: rotate(180deg);
+}
+
+.choices__inner::after {
+  transition: transform .15s linear;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 10px;
+  min-width: 16px;
+  min-height: 39px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iNiIgdmlld0JveD0iMCAwIDEwIDYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0wLjQ5NDk5OSAwLjY5MDAzM0MwLjI0OTk5OSAwLjkzNTAzMyAwLjI0OTk5OSAxLjMzMDAzIDAuNDk0OTk5IDEuNTc1MDNMNC42NSA1LjczMDAzQzQuODQ1IDUuOTI1MDMgNS4xNiA1LjkyNTAzIDUuMzU1IDUuNzMwMDNMOS41MSAxLjU3NTAzQzkuNzU1IDEuMzMwMDMgOS43NTUgMC45MzUwMzIgOS41MSAwLjY5MDAzM0M5LjI2NSAwLjQ0NTAzMiA4Ljg3IDAuNDQ1MDMyIDguNjI1IDAuNjkwMDMzTDUgNC4zMTAwM0wxLjM3NSAwLjY4NTAzNEMxLjEzNSAwLjQ0NTAzNCAwLjczNDk5OSAwLjQ0NTAzMyAwLjQ5NDk5OSAwLjY5MDAzM1oiIGZpbGw9IiM5ODczRkYiLz4KPC9zdmc+Cg==);
+}
+
+.choices__inner {
+  background: #E7E5EB;
+  min-height: 5px;
+  max-height: 37px;
+  height: 100%;
+  border: 1px solid $textGrey !important;
+  border-radius: 0 !important;
+  border-right: none !important;
+  display: flex;
+  align-items: center;
+  color: $black;
+}
+
+.choices[data-type*=select-one] .choices__inner {
+  padding: 0;
+  padding-left: 7px;
+}
+
+.choices__item {
+  font-size: 12px;
+}
+
+.choices__list--dropdown .choices__item--selectable {
+  padding-right: 10px;
+  font-size: 12px;
+}
+
+.choices__list--dropdown {
+  width: calc(100% + 1px);
+}
+
+.choices__list--single {
+  padding-right: 5px;
+}
+
+.new-client__placeholder {
+  padding-left: 30px;
+  font-size: 14px;
+  line-height: 19px;
+  color: $textGrey;
+  position: relative;
+  top: 25px;
+  transition: top .15s linear, font-size .15s linear;
+}
+
+.active-placeholder {
+  top: 0;
+  font-size: 10px;
+}
+
+.new-client__id {
+  color: $textGrey;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.span__placeholder {
+  color: $firm;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.new-contacts-input {
+  outline: none;
+  height: 37px;
+  border: 1px solid $textGrey;
+  width: 100%;
+  padding-left: 10px;
+  &::placeholder {
+    color: $textGrey;
+    transition: color .15s linear;
+  }
+  &:hover::placeholder {
+    color: $firm;
+  }
+  &:focus::placeholder {
+    color: $firm;
+  }
+}
+
+.filter-btn svg {
+  transition: transform .15s linear;
+}
+
+.filter-active {
+  color: $firm !important;
+}
+.filter-active-reverse {
+  color: $firm !important;
+  & svg {
+    transform: rotate(180deg);
+  }
+}
+
+.new-client__close-btn {
+  cursor: pointer;
+  border: 1px solid $textGrey;
+  min-width: 27px;
+  height: 37px;
+  justify-content: center;
+  align-items: center;
+  background: #E7E5EB;
+  transition: border .15s linear;
+  position: relative;
+  right: 1px;
+  & svg path{
+    transition: fill .15s linear;
+  }
+  &:hover svg path{
+    fill: $red;
+  }
+  &:hover {
+    border: 1px solid $red;
+  }
+}
+
+.tippy-box {
+  border-radius: 0 !important;
+}
+
+.blur {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba($black, 0.6);
+  justify-content: center;
+  align-items: center;
+  display: none;
+  opacity: 0;
+  transition: opacity .2s linear;
+}
+
+.new-client, .delete-window{
+  opacity: 1;
+  background: $white;
+  max-width: 450px;
+  width: 100%;
+  flex-direction: column;
+  padding: 24px 0;
+  position: relative;
+  display: none;
+  transition: opacity .3s linear, transform .3s linear;
+  transform: scale(0.5);
+  opacity: 0;
+}
+
+.new-client__header, .delete-header {
+  font-size: 18px;
+  line-height: 25px;
+  padding: 0 30px;
+  margin-bottom: 30px;
+}
+
+.delete-header {
+  margin: 0 auto;
+  margin-bottom: 11px;
+}
+
+.delete-paragraph {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 19px;
+  width: 275px;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.new-client__input {
+  margin: 0 30px;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid $textGrey;
+  margin-bottom: 30px;
+  height: 30px;
+  color: $black;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.new-client__add-contact {
+  border: none;
+  background: $grey;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 600;
+  & svg {
+    margin-right: 5px;
+  }
+}
+
+.new-client__add-client, .delete-client__add-client{
+  background: $firm;
+  border: none;
+  color: $white;
+  max-width: 147px;
+  padding: 12px 35px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background .15s linear;
+  &:hover {
+    background: #B89EFF;
+  }
+  &:active {
+    background: #8052FF;
+  }
+  &:disabled {
+    background: #C8C5D1;
+    cursor: auto;
+  }
+}
+
+.new_client__cancel, .delete_client__cancel{
+  border: none;
+  background: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.new_client__close-window, .delete_client__close-window {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
