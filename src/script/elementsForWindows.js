@@ -88,6 +88,5 @@ export function watchInputs(nameInput, surnameInput) {
   if (nameInput.value.trim()) {
     flags.name = true;
   }
-  console.log(flags);
   return !(flags.name && flags.surname);
 }

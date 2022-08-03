@@ -136,7 +136,6 @@ export function validateName(name) {
   let flag = true;
   for (const item of name) {
     if ("1234567890_+=/?><:;'#@!$%^&*()[]{}\\|".includes(item)) {
-      console.log(item);
       flag = false;
     }
   }

@@ -216,7 +216,6 @@ export function createNewUser(title, info, row) {
     cancelBtn.addEventListener("click", () => {
       setTimeout(() => {
         deleteBlock(info.id, row);
-        console.log(2);
       }, 600);
     });
   } else {
@@ -236,9 +235,15 @@ export function createNewUser(title, info, row) {
   document.querySelector(".display-bar").appendChild(mainBlock);
 
   if (info) {
-    document.querySelector(".choices__input").addEventListener("focus", () => {
-      document.querySelector(".choices__inner").classList.add("active-text");
-    });
+    if (info.contact) {
+      document
+        .querySelector(".choices__input")
+        .addEventListener("focus", () => {
+          document
+            .querySelector(".choices__inner")
+            .classList.add("active-text");
+        });
+    }
   }
 
   closeBtn.addEventListener("click", () => {
