@@ -30,11 +30,13 @@ export function EventsForDeleteWindow() {
   document
     .querySelector(".delete_client__cancel")
     .addEventListener("click", () => {
+      document.body.style.overflow = "auto";
+      document.body.style.paddingRight = "0px";
       document.querySelector(".delete-window").style.opacity = "0";
       document.querySelector(".delete-window").style.transform = "scale(0.5)";
       setTimeout(() => {
         document.querySelector(".blur").style.opacity = "0";
-        document.querySelector(".blur").innerHTML = "";
+        document.querySelector(".scroll-bar").innerHTML = "";
         setTimeout(() => {
           document.querySelector(".blur").style.display = "none";
         }, 300);
@@ -44,11 +46,13 @@ export function EventsForDeleteWindow() {
   document
     .querySelector(".delete_client__close-window")
     .addEventListener("click", () => {
+      document.body.style.overflow = "auto";
+      document.body.style.paddingRight = "0px";
       document.querySelector(".delete-window").style.opacity = "0";
       document.querySelector(".delete-window").style.transform = "scale(0.5)";
       setTimeout(() => {
         document.querySelector(".blur").style.opacity = "0";
-        document.querySelector(".blur").innerHTML = "";
+        document.querySelector(".scroll-bar").innerHTML = "";
         setTimeout(() => {
           document.querySelector(".blur").style.display = "none";
         }, 300);
@@ -72,7 +76,7 @@ export function changeContact(contacts) {
 
   let ind = 0;
   for (const contact of contacts) {
-    if (ind === 4) {
+    if (ind === 4 && contacts.length > 5) {
       const btn = document.createElement("button");
       btn.classList.add("btn-all-contact");
       btn.innerText = "+" + String(contacts.length - 4);
@@ -94,8 +98,8 @@ export function changeContact(contacts) {
           }
           // eslint-disable-next-line no-undef
           tippy(btn, {
-            content: contact.value,
-            trigger: "mouseenter",
+            allowHTML: true,
+            content: `${contact.type}: <b>${contact.value}</b>`,
           });
           mainBlock.appendChild(btn);
         }
@@ -118,12 +122,23 @@ export function changeContact(contacts) {
       }
       // eslint-disable-next-line no-undef
       tippy(btn, {
-        content: contact.value,
-        trigger: "mouseenter",
+        allowHTML: true,
+        content: `${contact.type}: <b>${contact.value}</b>`,
       });
       mainBlock.appendChild(btn);
     }
     ind += 1;
   }
   return mainBlock;
+}
+
+export function validateName(name) {
+  let flag = true;
+  for (const item of name) {
+    if ("1234567890_+=/?><:;'#@!$%^&*()[]{}\\|".includes(item)) {
+      console.log(item);
+      flag = false;
+    }
+  }
+  return flag;
 }

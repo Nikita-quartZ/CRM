@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelector(".catalog__btn-create-client")
     .addEventListener("click", () => {
+      if (!(window.innerWidth < 1000)) {
+        document.body.style.overflow = "hidden";
+        document.body.style.paddingRight = "17px";
+      }
       createNewUser("Новый клиент");
       document.querySelector(".blur").style.display = "flex";
       setTimeout(() => {
@@ -32,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("input", searchTiming);
 
   function search() {
-    console.log("WORK");
     fetchJson("http://localhost:3000/api/clients").then((e) => {
       removeFilters();
       for (const item of document.querySelectorAll(".catalog__row")) {
@@ -77,7 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
       colomn.classList.add("catalog__changes");
       const btns = changeUser();
       btns[0].addEventListener("click", () => {
+        if (!(window.innerWidth < 1000)) {
+          document.body.style.overflow = "hidden";
+          document.body.style.paddingRight = "17px";
+        }
+        btns[0].innerHTML =
+          '<svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.00008 6.04008C1.00008 8.82356 3.2566 11.0801 6.04008 11.0801C8.82356 11.0801 11.0801 8.82356 11.0801 6.04008C11.0801 3.2566 8.82356 1.00008 6.04008 1.00008C5.38922 1.00008 4.7672 1.12342 4.196 1.34812" stroke="#9873FF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/></svg> Изменить';
+        btns[0].classList.add("active-spinner");
         fetchJson(`http://localhost:3000/api/clients/${info.id}`).then((e) => {
+          btns[0].innerHTML =
+            '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.7"><path d="M2 11.5V14H4.5L11.8733 6.62662L9.37333 4.12662L2 11.5ZM13.8067 4.69329C14.0667 4.43329 14.0667 4.01329 13.8067 3.75329L12.2467 2.19329C11.9867 1.93329 11.5667 1.93329 11.3067 2.19329L10.0867 3.41329L12.5867 5.91329L13.8067 4.69329Z" fill="#9873FF"/></g></svg> Изменить';
+          btns[0].classList.remove("active-spinner");
           createNewUser("Изменить данные", e, row);
           document.querySelector(".blur").style.display = "flex";
           setTimeout(() => {
@@ -93,7 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       colomn.appendChild(btns[0]);
       btns[1].addEventListener("click", () => {
-        console.log("DSAD");
+        if (!(window.innerWidth < 1000)) {
+          document.body.style.overflow = "hidden";
+          document.body.style.paddingRight = "17px";
+        }
         deleteBlock(info.id, row);
         document.querySelector(".blur").style.display = "flex";
         setTimeout(() => {
@@ -105,11 +121,17 @@ document.addEventListener("DOMContentLoaded", () => {
               "scale(1)";
           }, 300);
         }, 300);
-        // row.remove();
       });
       colomn.appendChild(btns[1]);
       row.appendChild(colomn);
       table.appendChild(row);
+      setTimeout(() => {
+        document.querySelectorAll(".catalog__row").forEach((e) => {
+          e.style.opacity = "1";
+        });
+        document.querySelector(".catalog__btn-create-client").style.opacity =
+          "1";
+      }, 100);
     }
   }
 
@@ -195,7 +217,17 @@ document.addEventListener("DOMContentLoaded", () => {
             createTableUsers(sortingUpdatedDate(e, false));
           }
         });
-      createTableUsers(sortingId(e, false));
+      if (typeof e !== "undefined") {
+        if (document.querySelector(".spinner-block")) {
+          document.querySelector(".spinner-block").style.opacity = "0";
+          setTimeout(() => {
+            document.querySelector(".spinner-block").remove();
+            createTableUsers(sortingId(e, false));
+          }, 300);
+        }
+      } else {
+        console.log("Вознила проблема сервара");
+      }
     });
   }
   getCatalog();

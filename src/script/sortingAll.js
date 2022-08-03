@@ -1,5 +1,4 @@
 export function sortingId(object, bool) {
-  console.log(object);
   for (let i = 0; i < object.length - 1; i++) {
     for (let j = i + 1; j < object.length; j++) {
       if (object[j].id < object[i].id) {
@@ -74,9 +73,10 @@ export function searchClients(search, object) {
   const results = [];
   for (const item of object) {
     if (
-      !(item.surname + " " + item.name + " " + item.lastName)
+      // eslint-disable-next-line no-extra-boolean-cast
+      !!(item.surname + " " + item.name + " " + item.lastName)
         .toLowerCase()
-        .indexOf(search.toLowerCase())
+        .includes(search.toLowerCase())
     ) {
       results.push(item);
     }

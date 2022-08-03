@@ -1,11 +1,26 @@
 import { changeContact, changeFormatDate } from "./helperFunc.js";
 
-export function deleteClient(id) {
+export function deleteClient(id, row) {
   fetch(`http://localhost:3000/api/clients/${id}`, {
     method: "DELETE",
   })
     .then((response) => response.json())
-    .then((e) => console.log(e));
+    .then((e) => {
+      if (e.status === 200) {
+        row.remove();
+        document.querySelector(".delete-window").style.opacity = "0";
+        document.querySelector(".delete-window").style.transform = "scale(0.5)";
+        setTimeout(() => {
+          document.querySelector(".blur").style.opacity = "0";
+          document.querySelector(".scroll-bar").innerHTML = "";
+          setTimeout(() => {
+            document.querySelector(".blur").style.display = "none";
+          }, 300);
+        }, 300);
+      } else {
+        document.querySelector(".error-paragraph").style.opacity = "1";
+      }
+    });
 }
 
 export function fetchJson(url) {
@@ -35,7 +50,17 @@ export function createUser(name, surname, lastName, contacts) {
       "Content-Type": "application/json;charset=utf-8",
     },
     body: JSON.stringify(user),
-  }).then((e) => console.log(e));
+  }).then((e) => {
+    if (e.status === 200) {
+      console.log("YES");
+    } else {
+      document.querySelector(".error-paragraph").style.opacity = "1";
+      document.querySelector(".save-btn-spinner").style.opacity = "0";
+      document
+        .querySelector(".new-client__text")
+        .classList.remove("new-client__text-active");
+    }
+  });
 }
 
 export function changeInfoUser(id, name, surname, lastName, contacts, row) {
@@ -76,11 +101,17 @@ export function changeInfoUser(id, name, surname, lastName, contacts, row) {
       document.querySelector(".new-client").style.transform = "scale(0.5)";
       setTimeout(() => {
         document.querySelector(".blur").style.opacity = "0";
-        document.querySelector(".blur").innerHTML = "";
+        document.querySelector(".scroll-bar").innerHTML = "";
         setTimeout(() => {
           document.querySelector(".blur").style.display = "none";
         }, 300);
       }, 300);
+    } else {
+      document.querySelector(".error-paragraph").style.opacity = "1";
+      document.querySelector(".save-btn-spinner").style.opacity = "0";
+      document
+        .querySelector(".new-client__text")
+        .classList.remove("new-client__text-active");
     }
   });
 }

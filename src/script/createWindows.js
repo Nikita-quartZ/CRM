@@ -1,5 +1,5 @@
 import { deleteClient, createUser, changeInfoUser } from "./apiFunc.js";
-import { EventsForDeleteWindow } from "./helperFunc.js";
+import { EventsForDeleteWindow, validateName } from "./helperFunc.js";
 import { newContact, watchInputs } from "./elementsForWindows.js";
 
 export function createNewUser(title, info, row) {
@@ -106,15 +106,24 @@ export function createNewUser(title, info, row) {
   const contactBtn = document.createElement("button");
   contactBtn.classList.add("new-client__add-contact");
   contactBtn.innerHTML =
-    '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00001 4.66659C7.63334 4.66659 7.33334 4.96659 7.33334 5.33325V7.33325H5.33334C4.96668 7.33325 4.66668 7.63325 4.66668 7.99992C4.66668 8.36659 4.96668 8.66659 5.33334 8.66659H7.33334V10.6666C7.33334 11.0333 7.63334 11.3333 8.00001 11.3333C8.36668 11.3333 8.66668 11.0333 8.66668 10.6666V8.66659H10.6667C11.0333 8.66659 11.3333 8.36659 11.3333 7.99992C11.3333 7.63325 11.0333 7.33325 10.6667 7.33325H8.66668V5.33325C8.66668 4.96659 8.36668 4.66659 8.00001 4.66659ZM8.00001 1.33325C4.32001 1.33325 1.33334 4.31992 1.33334 7.99992C1.33334 11.6799 4.32001 14.6666 8.00001 14.6666C11.68 14.6666 14.6667 11.6799 14.6667 7.99992C14.6667 4.31992 11.68 1.33325 8.00001 1.33325ZM8.00001 13.3333C5.06001 13.3333 2.66668 10.9399 2.66668 7.99992C2.66668 5.05992 5.06001 2.66659 8.00001 2.66659C10.94 2.66659 13.3333 5.05992 13.3333 7.99992C13.3333 10.9399 10.94 13.3333 8.00001 13.3333Z" fill="#9873FF" /></svg> Добавить контакт';
+    '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"></svg> Добавить контакт';
   contactsBlock.appendChild(contactsList);
   contactsBlock.appendChild(contactBtn);
+  const errorParagraph = document.createElement("p");
+  errorParagraph.className = "error-paragraph";
+  errorParagraph.innerText = "Что-то пошло не так...";
   mainBlock.appendChild(contactsBlock);
+  mainBlock.appendChild(errorParagraph);
   if (info) {
     if (info.contacts) {
       for (const contact of info.contacts) {
         newContact(contactBtn, contactsList, contact.type, contact.value);
       }
+    }
+  }
+  if (info) {
+    if (info.contacts.length === 10) {
+      contactBtn.style.display = "none";
     }
   }
 
@@ -124,26 +133,49 @@ export function createNewUser(title, info, row) {
 
   const saveBtn = document.createElement("button");
   saveBtn.classList.add("new-client__add-client");
-  saveBtn.innerText = "Сохранить";
+  saveBtn.innerHTML =
+    '<svg class="save-btn-spinner" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.00008 6.03996C1.00008 8.82344 3.2566 11.08 6.04008 11.08C8.82356 11.08 11.0801 8.82344 11.0801 6.03996C11.0801 3.25648 8.82356 0.999956 6.04008 0.999956C5.38922 0.999956 4.7672 1.1233 4.196 1.348" stroke="#B89EFF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/></svg> <span class="new-client__text">Сохранить</span>';
   if (!info) {
     saveBtn.disabled = true;
   }
   nameInput.addEventListener("input", () => {
     saveBtn.disabled = watchInputs(nameInput, surnameInput);
+    document.querySelector(".error-paragraph").style.opacity = "0";
+    nameInput.classList.remove("new-client__error-input");
   });
   surnameInput.addEventListener("input", () => {
     saveBtn.disabled = watchInputs(nameInput, surnameInput);
+    document.querySelector(".error-paragraph").style.opacity = "0";
+    surnameInput.classList.remove("new-client__error-input");
+  });
+  lastNameInput.addEventListener("input", () => {
+    document.querySelector(".error-paragraph").style.opacity = "0";
   });
   saveBtn.addEventListener("click", () => {
+    document.querySelector(".save-btn-spinner").style.opacity = "1";
+    document
+      .querySelector(".new-client__text")
+      .classList.add("new-client__text-active");
+    document
+      .querySelector(".new-client__add-client")
+      .classList.add("delete-client__btn-active");
     const flags = {
       name: false,
       surname: false,
     };
     if (surnameInput.value.trim()) {
       flags.surname = true;
+      if (!validateName(surnameInput.value.trim())) {
+        flags.surname = false;
+        surnameInput.classList.add("new-client__error-input");
+      }
     }
     if (nameInput.value.trim()) {
       flags.name = true;
+      if (!validateName(nameInput.value.trim())) {
+        flags.name = false;
+        nameInput.classList.add("new-client__error-input");
+      }
     }
     if (flags.name && flags.surname) {
       const contacts = [];
@@ -181,9 +213,12 @@ export function createNewUser(title, info, row) {
   cancelBtn.classList.add("new_client__cancel");
   if (info) {
     cancelBtn.innerText = "Удалить клиента";
-    setTimeout(() => {
-      deleteBlock(info.id, row);
-    }, 600);
+    cancelBtn.addEventListener("click", () => {
+      setTimeout(() => {
+        deleteBlock(info.id, row);
+        console.log(2);
+      }, 600);
+    });
   } else {
     cancelBtn.innerText = "Отмена";
   }
@@ -194,14 +229,26 @@ export function createNewUser(title, info, row) {
   mainBlock.appendChild(saveBtn);
   mainBlock.appendChild(cancelBtn);
   mainBlock.appendChild(closeBtn);
-  document.querySelector(".blur").appendChild(mainBlock);
+
+  document.querySelector(
+    ".scroll-bar"
+  ).innerHTML = `<div class="display-bar" data-simplebar></div>`;
+  document.querySelector(".display-bar").appendChild(mainBlock);
+
+  if (info) {
+    document.querySelector(".choices__input").addEventListener("focus", () => {
+      document.querySelector(".choices__inner").classList.add("active-text");
+    });
+  }
 
   closeBtn.addEventListener("click", () => {
+    document.body.style.overflow = "auto";
+    document.body.style.paddingRight = "0px";
     document.querySelector(".new-client").style.opacity = "0";
     document.querySelector(".new-client").style.transform = "scale(0.5)";
     setTimeout(() => {
       document.querySelector(".blur").style.opacity = "0";
-      document.querySelector(".blur").innerHTML = "";
+      document.querySelector(".scroll-bar").innerHTML = "";
       setTimeout(() => {
         document.querySelector(".blur").style.display = "none";
       }, 300);
@@ -209,6 +256,7 @@ export function createNewUser(title, info, row) {
   });
 
   contactBtn.addEventListener("click", () => {
+    document.querySelector(".error-paragraph").style.opacity = "0";
     const btn = document.querySelector(".new-client__add-contact");
     const block = document.querySelector(".new-client_list-contacts-blocks");
     newContact(btn, block);
@@ -229,13 +277,27 @@ export function createNewUser(title, info, row) {
       document.querySelector(".new-client").style.opacity = "0";
       document.querySelector(".new-client").style.transform = "scale(0.5)";
       setTimeout(() => {
-        document.querySelector(".blur").innerHTML = "";
+        document.querySelector(".scroll-bar").innerHTML = "";
         deleteBlock(info.id, row);
         document.querySelector(".delete-window").style.display = "flex";
         setTimeout(() => {
           document.querySelector(".delete-window").style.opacity = "1";
           document.querySelector(".delete-window").style.transform = "scale(1)";
         }, 100);
+      }, 300);
+    });
+  } else {
+    cancelBtn.addEventListener("click", () => {
+      document.body.style.overflow = "auto";
+      document.body.style.paddingRight = "0px";
+      document.querySelector(".new-client").style.opacity = "0";
+      document.querySelector(".new-client").style.transform = "scale(0.5)";
+      setTimeout(() => {
+        document.querySelector(".blur").style.opacity = "0";
+        document.querySelector(".scroll-bar").innerHTML = "";
+        setTimeout(() => {
+          document.querySelector(".blur").style.display = "none";
+        }, 300);
       }, 300);
     });
   }
@@ -252,9 +314,14 @@ export function deleteBlock(id, row) {
   paragraph.innerText = "Вы действительно хотите удалить данного клиента?";
   paragraph.classList.add("delete-paragraph");
   mainBlock.appendChild(paragraph);
+  const errorParagraph = document.createElement("p");
+  errorParagraph.className = "error-paragraph";
+  errorParagraph.innerText = "Что-то пошло не так...";
+  mainBlock.appendChild(errorParagraph);
   const saveBtn = document.createElement("button");
   saveBtn.classList.add("delete-client__add-client");
-  saveBtn.innerText = "Удалить";
+  saveBtn.innerHTML =
+    '<svg class="save-btn-spinner" width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1.00008 6.03996C1.00008 8.82344 3.2566 11.08 6.04008 11.08C8.82356 11.08 11.0801 8.82344 11.0801 6.03996C11.0801 3.25648 8.82356 0.999956 6.04008 0.999956C5.38922 0.999956 4.7672 1.1233 4.196 1.348" stroke="#B89EFF" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/></svg> <span class="new-client__text">Удалить</span>';
   const cancelBtn = document.createElement("button");
   cancelBtn.classList.add("delete_client__cancel");
   cancelBtn.innerText = "Отмена";
@@ -265,19 +332,16 @@ export function deleteBlock(id, row) {
   mainBlock.appendChild(saveBtn);
   mainBlock.appendChild(cancelBtn);
   mainBlock.appendChild(closeBtn);
-  document.querySelector(".blur").appendChild(mainBlock);
+  document.querySelector(".scroll-bar").appendChild(mainBlock);
   EventsForDeleteWindow();
   saveBtn.addEventListener("click", () => {
-    deleteClient(id);
-    document.querySelector(".delete-window").style.opacity = "0";
-    document.querySelector(".delete-window").style.transform = "scale(0.5)";
-    setTimeout(() => {
-      document.querySelector(".blur").style.opacity = "0";
-      document.querySelector(".blur").innerHTML = "";
-      setTimeout(() => {
-        document.querySelector(".blur").style.display = "none";
-      }, 300);
-    }, 300);
-    row.remove();
+    document.querySelector(".save-btn-spinner").style.opacity = "1";
+    document
+      .querySelector(".new-client__text")
+      .classList.add("new-client__text-active");
+    document
+      .querySelector(".delete-client__add-client")
+      .classList.add("delete-client__btn-active");
+    deleteClient(id, row);
   });
 }
