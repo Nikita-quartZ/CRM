@@ -187,7 +187,6 @@ select {
 }
 
 .catalog__btn-create-client {
-  opacity: 0;
   cursor: pointer;
   display: block;
   margin: 0 auto;
